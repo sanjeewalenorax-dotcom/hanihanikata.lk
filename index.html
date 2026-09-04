@@ -1,0 +1,18 @@
+<!doctype html><html lang="si"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>හනිහනිකට.lk</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div class="logo">🏠 හනිහනිකට<span>.lk</span><small>sanjeewalenora</small></div><nav><button>සිංහල</button><button>English</button><button>தமிழ்</button><button>Login</button><button class="primary">Register</button></nav></header>
+<section class="hero"><h1>ඔබට අවශ්‍ය දේ හනිකට සොයන්න</h1><p>AI Search · Voice Search · Verified Marketplace</p>
+<div class="search"><input id="q" placeholder="උදා: රු. 50,000ට අඩුවෙන් Kandy වල used iPhone එකක්"><button onclick="voice()">🎙️</button><button class="primary" onclick="search()">🔎 AI Search</button></div><div id="msg"></div></section>
+<section><h2>Categories</h2><div class="cats"><div>🚗 Vehicles</div><div>🏠 Property</div><div>📱 Phones</div><div>💻 Electronics</div><div>👕 Fashion</div><div>🛠️ Services</div><div>💼 Jobs</div><div>📦 Other</div></div></section>
+<section><div class="bar"><h2>Featured / Latest Ads</h2><button class="primary" onclick="postAd()">＋ Post Your Ad</button></div><div id="ads" class="ads"></div></section>
+<section class="dash"><h2>Management</h2><div class="cats"><div>👤 User Dashboard</div><div>👨‍💼 Agent Dashboard</div><div>👑 Admin Dashboard</div><div>💳 Payments</div><div>🤖 AI Moderation</div><div>🔐 Permissions & Audit Logs</div></div></section>
+<footer><b>හනිහනිකට.lk</b><br><small>sanjeewalenora · © 2026</small></footer>
+<script>
+async function search(){let q=document.getElementById('q').value;document.getElementById('msg').textContent='🤖 AI Search processing: '+q;const r=await fetch('/api/ads?status=approved&q='+encodeURIComponent(q));render(await r.json())}
+async function load(){const r=await fetch('/api/ads?status=approved');render(await r.json())}
+function render(a){document.getElementById('ads').innerHTML=a.length?a.map(x=>`<article><div class="pic">📦</div><b>${esc(x.title)}</b><strong>රු. ${Number(x.price).toLocaleString()}</strong><small>${esc(x.city||'Sri Lanka')} · ${esc(x.condition||'')}</small></article>`).join(''):'<p>No approved ads yet.</p>'}
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function voice(){if(!('webkitSpeechRecognition'in window)){alert('Voice Search is not supported by this browser.');return}let r=new webkitSpeechRecognition();r.lang='si-LK';r.onresult=e=>{document.getElementById('q').value=e.results[0][0].transcript;search()};r.start()}
+function postAd(){alert('Post Ad flow: Photos → AI Check → Details → Price → Location → Preview → Payment → AI Check → Admin Approval → Published')}
+load();
+</script></body></html>
